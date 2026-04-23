@@ -1,10 +1,22 @@
 const express = require("express");
-const app = express();
+const cors = require("cors");
 
-app.get("/", (req, res) => {
-  res.send("Road Review System Backend Running");
-});
+const app = express(); // ✅ MUST BE FIRST
 
+app.use(cors());
+app.use(express.json());
+
+// ---------------- DATABASE ----------------
+const pool = require("./db");
+
+// ---------------- ROUTES ----------------
+const roadRoutes = require("./routes/roads");
+app.use("/api/roads", roadRoutes);
+
+const authRoutes = require("./routes/auth");
+app.use("/api/auth", authRoutes);
+
+// ---------------- SERVER ----------------
 app.listen(5000, () => {
-  console.log("Server started on port 5000");
+  console.log("Server running on port 5000");
 });
